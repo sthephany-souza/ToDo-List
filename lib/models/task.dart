@@ -1,8 +1,6 @@
-import 'package:mongo_dart/mongo_dart.dart';
-
 class TaskModel {
   // Classe que representa o compromisso agendado
-  final ObjectId? id; // ID do compromisso no MongoDB
+  final String? id; // ID do compromisso
   final String userId; // ID do usuário dono desse compromisso (vínculo)
   final String title; // Título do compromisso
   final String description; // Descrição detalhada
@@ -17,18 +15,24 @@ class TaskModel {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    final map = {
       'title': title,
       'description': description,
       'isCompleted': isCompleted,
       'userId': userId,
     };
+
+    // Se o ID existir (ao atualizar), incluímos no mapa para o Supabase saber qual registro alterar
+    if (id != null) {
+      map['id'] = id as dynamic;
+    }
+    return map;
   }
   
   // Converte o Map retornado do banco de volta para a classe Appointment
   factory TaskModel.fromMap(Map<String, dynamic> map) {
     return TaskModel(
-      id: map['_id'] as ObjectId?,
+      id: map['id'].toString(),
       title: map['title'] ?? '',
       description: map['description'] ?? '',
       isCompleted: map['isCompleted'] ?? false,

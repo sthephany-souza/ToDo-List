@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../components/custom_text_field.dart';
 import '../models/task.dart';
-import '../services/mongo_service.dart';
+import '../services/supabase_service.dart';
 
 // Tela do formulário para adicionar ou editar uma Tarefa (CRUD - Create/Update)
 class TaskFormView extends StatefulWidget {
@@ -51,7 +51,7 @@ class _TaskFormViewState extends State<TaskFormView> {
     if (_formKey.currentState!.validate()) {
       if (_editingTask == null) {
         // --- CRIAR (CREATE) ---
-        await MongoService.createTask(
+        await SupabaseService.createTask(
           TaskModel(
             userId: userId!,
             title: _titleController.text.trim(),
@@ -61,7 +61,7 @@ class _TaskFormViewState extends State<TaskFormView> {
         );
       } else {
         // --- ATUALIZAR (UPDATE) ---
-        await MongoService.updateTask(
+        await SupabaseService.updateTask(
           TaskModel(
             id: _editingTask!.id,
             userId: userId!,

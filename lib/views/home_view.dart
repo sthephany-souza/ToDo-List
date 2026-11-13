@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
+import '../services/supabase_service.dart';
+
 import '../core/routes.dart';
 import '../models/task.dart';
-import '../services/mongo_service.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -29,7 +31,7 @@ class _HomeViewState extends State<HomeView> {
 
   // Função para deletar uma tarefa do banco
   void _deleteTask(TaskModel item) async {
-    await MongoService.deleteTask(item.id!);
+    await SupabaseService.deleteTask(item.id!);
     setState(() {}); // Recarrega a tela para atualizar a lista
   }
 
@@ -42,7 +44,7 @@ class _HomeViewState extends State<HomeView> {
       description: item.description,
       isCompleted: !item.isCompleted, // Inverte o valor atual
     );
-    await MongoService.updateTask(updatedTask);
+    await SupabaseService.updateTask(updatedTask);
     setState(() {}); // Recarrega a tela
   }
 
@@ -117,7 +119,7 @@ class _HomeViewState extends State<HomeView> {
           // --- LISTA DE TAREFAS (FUTURE BUILDER) ---
           Expanded(
             child: FutureBuilder<List<TaskModel>>(
-              future: MongoService.getTasks(userId),
+              future: SupabaseService.getTasks(userId),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());

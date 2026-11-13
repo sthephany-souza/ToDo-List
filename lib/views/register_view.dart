@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_lista_tarefas/core/routes.dart';
 import '../components/custom_text_field.dart';
 import '../models/user.dart';
-import '../services/mongo_service.dart';
+import '../services/supabase_service.dart';
 
 // Tela de cadastro de novos usuários
 class RegisterView extends StatefulWidget {
@@ -36,8 +37,8 @@ class _RegisterViewState extends State<RegisterView> {
         password: _passwordController.text.trim(),
       );
 
-      // 3. Tenta cadastrar no MongoDB via MongoService
-      final success = await MongoService.registerUser(user);
+      // 3. Tenta cadastrar no Supabase
+      final success = await SupabaseService.registerUser(user);
       
       setState(() => _isLoading = false); // Desativa o carregando
 
@@ -48,9 +49,9 @@ class _RegisterViewState extends State<RegisterView> {
         );
         Navigator.pop(context); // Fecha a tela atual e volta
       } else if (mounted) {
-        // Exibe aviso caso o e-mail já exista no banco
+        // Mostra uma mensagem genérica ou de erro
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('E-mail já cadastrado.')),
+          const SnackBar(content: Text('Erro ao cadastrar. Verifique o console.')),
         );
       }
     }
@@ -94,6 +95,10 @@ class _RegisterViewState extends State<RegisterView> {
                       onPressed: _register,
                       child: const Text('Cadastrar'),
                     ),
+              TextButton(
+                onPressed: () => Navigator.pushNamed(context, Routes.login),
+                child: const Text('Já possui conta? Entre'),
+              ),
             ],
           ),
         ),

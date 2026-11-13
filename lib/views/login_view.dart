@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../components/custom_text_field.dart';
 import '../core/routes.dart';
-import '../services/mongo_service.dart';
+import '../services/supabase_service.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -24,7 +24,7 @@ class _LoginViewState extends State<LoginView> {
       setState(() => _isLoading = true); // Exibe o spinner
 
       // 2. Consulta o banco de dados via MongoService
-      final user = await MongoService.loginUser(
+      final user = await SupabaseService.loginUser(
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
